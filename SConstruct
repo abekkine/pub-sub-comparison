@@ -17,6 +17,7 @@ env.Append( CPPFLAGS = ['-std=c++11'] )
 env.Append( CPPFLAGS = ['-Wfatal-errors'] )
 
 env.Append( LIBS = ['pthread'] )
+env.Append( LIBS = ['gomp'] )
 
 
 env.Program(TARGET, source = files)

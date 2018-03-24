@@ -1,6 +1,8 @@
 #ifndef TEST_SCENARIO_H_
 #define TEST_SCENARIO_H_
 
+#include <stdio.h>
+
 #include <vector>
 #include <thread>
 
@@ -45,6 +47,17 @@ public:
         std::thread generator(&TestScenario::Generate, this);
 
         generator.join();
+
+        double sum_add = 0.0;
+        double sum_mul = 0.0;
+        for (auto n : addition_results_) {
+            sum_add += n;
+        }
+        for (auto n : multiplication_results_) {
+            sum_mul += n;
+        }
+        printf("Sum add results  : %.5f\n", sum_add);
+        printf("Sum mult results : %.5f\n", sum_mul);
     }
     void AddNumbers(BusDataInterface * data) {
         TestData * numbers = static_cast<TestData *>(data);
@@ -75,6 +88,25 @@ public:
                     break;
             }
         }
+    }
+    void DumpExpectedResults() {
+        double sum_add = 0.0;
+        double sum_mul = 0.0;
+        for (int i=0; i<kTestSize; i++) {
+            switch(data_.operation_buffer[i]) {
+            case '+':
+                sum_add += data_.number_buffer[2*i + 0] + data_.number_buffer[2*i + 1];
+                break;
+            case '*':
+                sum_mul += data_.number_buffer[2*i + 0] * data_.number_buffer[2*i + 1];
+                break;
+            default:
+                break;
+            }
+        }
+
+        printf("Sum add results  : %.5f\n", sum_add);
+        printf("Sum mult results : %.5f\n", sum_mul);
     }
 
 private:
